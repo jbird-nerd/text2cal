@@ -1,0 +1,65 @@
+{
+  "manifest_version": 3,
+  "name": "Text2Cal",
+  "version": "4.0.2",
+  "description": "Capture an area on screen, OCR it, parse dates, and create calendar events.",
+  "action": {
+    "default_title": "Text2Cal"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "tabs",
+    "contextMenus",
+    "downloads"
+  ],
+  "host_permissions": [
+    "https://vision.googleapis.com/*",
+    "https://api.openai.com/*",
+    "https://api.anthropic.com/*",
+    "https://generativelanguage.googleapis.com/*",
+    "https://maps.googleapis.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "components.js",
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "sandbox.html",
+        "sandbox.js",
+        "components.js",
+        "tesseract/*"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; connect-src https://vision.googleapis.com/ https://api.openai.com/ https://api.anthropic.com/ https://generativelanguage.googleapis.com/ https://corsproxy.io/ https://scontent-iad3-1.xx.fbcdn.net/"
+  },
+  "options_page": "options.html",
+  "commands": {
+    "start-capture": {
+      "suggested_key": {
+        "default": "Alt+C"
+      },
+      "description": "Start capture"
+    }
+  }
+}
